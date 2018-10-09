@@ -1,0 +1,12 @@
+Eccoci qui
+
+comandi principali
+
+git add *
+
+git commit -m "titolo push"
+
+git push origin master
+
+------------------------------
+

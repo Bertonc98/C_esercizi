@@ -32,7 +32,6 @@ int main(){
 		move=rand()%4;
 		if((campo[position.y+1][position.x]!='.') && (campo[position.y-1][position.x]!='.') &&
 		   (campo[position.y][position.x+1]!='.') && (campo[position.y][position.x-1]!='.')){
-		   	printf("break \n");
 		   	campo[position.y][position.x]=lettera;
 			break;
 		}
@@ -57,10 +56,6 @@ int main(){
 			lettera++;
 			position.x--;
 		}
-
-		if(lettera=='Z')
-			printf("%d \n",isalpha(lettera));
-
 	}
 
 	printf("\n");

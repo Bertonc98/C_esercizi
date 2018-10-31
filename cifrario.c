@@ -5,9 +5,10 @@ int main(){
 int key;
 char c, pulisci_buffer;
 
+printf("Inserire la chiave: ");
 scanf(" %d", &key);
 pulisci_buffer=getchar();
-
+printf("Inserire la frase da cifrare: ");
 while( (c=getchar())!='\n'){
 	if(islower(c)){
 		if((c+key)>'z'){

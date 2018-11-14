@@ -55,6 +55,8 @@ void traslazione(Rettangolo *r, float movex, float movey){
 	r->p2.y+=movey;
 }
 
+
+
 int main(){	
 	Punto pu, pd, centro;
 	Rettangolo r;

@@ -12,11 +12,13 @@ int main(){
 	scanf("%d",&n);
 
 	p=my_malloc(n,p);
+	printf("Puntatore malloc:%p\n",p);
 
 	printf("Inserisci la porzione di memoria da riallocare: ");
 	scanf("%d",&m);
 
 	p=my_realloc(m,p);
+	printf("Puntatore realloc:%p\n",p);
 
 	free(p);
 	return 0;

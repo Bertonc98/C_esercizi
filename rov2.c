@@ -34,7 +34,7 @@ int main(){
 
 	}while(x!=0);
 
-	for(int i=0; i<index; i++)
+	for(int i=index-1; i>0; i--)
 		printf("%d ",*(p+i));
 	printf("\n");
 	free(p);

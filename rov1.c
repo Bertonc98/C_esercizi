@@ -14,10 +14,6 @@ int main(){
 			if(index>=size){
 				size=size*2;
 				temp=p;
-				for(int i=0; i<index;i++){
-					printf("%d ",*(temp+i));
-				}
-				printf("\n");
 				//printf("size=%d\n",size);
 				p=malloc(size*sizeof(int));
 				if(p==NULL)
@@ -34,9 +30,8 @@ int main(){
 
 	}while(x!=0);
 
-	for(int i=0; i<index; i++)
+	for(int i=index-1; i>=0; i--)
 		printf("%d ",*(p+i));
 	printf("\n");
 	free(p);
 	return 0;
-}

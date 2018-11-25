@@ -4,24 +4,21 @@
 #define N 10
 
 int main(){
-	int array[N], min, temp;
+	int array[N], x, j;
 	srand(time(NULL));
 	for(int i=0; i<N; i++){
 		//scanf(" %d",&array[i]);
 		array[i]=rand()%100;
 	}
 
-	for(int k=0; k<N; k++){
-		min=k;
-		for(int j=k+1; j<N; j++){
-			if(array[j]<array[min]){
-				min=j;
-			}
+	for(int k=1; k<N; k++){
+		x=array[k];
+		j=k-1;
+		while(j>=0 && array[j]>x){
+			array[j+1]=array[j];
+			j--;
 		}
-		temp=array[k];
-		array[k]=array[min];
-		array[min]=temp;
-
+		array[j+1]=x;
 	}
 
 	for(int i=0; i<N; i++){

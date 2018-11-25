@@ -19,7 +19,7 @@ int main(){
 				book=new_book(n,book, old);
 				break;
 			case '+':
-				scanf(" %d ",&in_out);
+				scanf(" %d",&in_out);
 				if(in_out<n){
 					name=read_word();
 					book_in(in_out, name, book);

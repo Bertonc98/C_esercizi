@@ -58,17 +58,24 @@ int main(){
 	bist_print_inverso(root);
 
 	Occorrenza found=NULL;
+	char *output=NULL;
 	printf("Inserire le parole da cercare nel testo\n");
 	do{
 		x=read_word();
 		if(strcmp(x,stop)){
-			found=ricerca(root, x);	
-
-			if(found!=NULL){
-				printf("%s---%d\n",found->word,found->n);
-			}
+			found=ricerca(root, x);
+			if(found==NULL)
+				printf("%s 0\n",x);
+			else
+				printf("%s %d\n",x,found->n);
 		}		
 	}while(strcmp(x,stop));
+
+	if(output!=NULL){
+		printf("PAROLE TROVATE\n");
+		printf("**************\n");
+		printf("%s\n", output);
+	}
 
 	return 0;
 }
@@ -178,7 +185,7 @@ Bist_node bist_insert(Bist_node new, Bist_node root){
 
 void bist_print_alpha(Bist_node b){
 	if(b==NULL){
-		printf("\n");
+		
 	}
 	else if(b->l==NULL && b->r==NULL){
 		printf("%s--%d\n", b->occorrenza->word, b->occorrenza->n);
@@ -195,27 +202,23 @@ void bist_print_alpha(Bist_node b){
 
 void bist_print_inverso(Bist_node b){
 	if(b==NULL){
-		printf("\n");
+		
 	}
 	else if(b->l==NULL && b->r==NULL){
 		printf("%s--%d\n", b->occorrenza->word, b->occorrenza->n);
 	}
 	else{
-		
-		bist_print_alpha(b->r);
+
+		bist_print_inverso(b->r);
 		
 		printf("%s--%d\n", b->occorrenza->word, b->occorrenza->n);
 
-		
-		bist_print_alpha(b->l);
+		bist_print_inverso(b->l);
 	}
 }
 
 Occorrenza ricerca(Bist_node root, char *word){
 	if(root==NULL){
-		return NULL;
-	}
-	else if(root->l==NULL && root->r==NULL){
 		return NULL;
 	}
 	else if(strcmp(root->occorrenza->word,word)==0){

@@ -62,7 +62,7 @@ char *read_line(){
 char *read_word(){
 	char *p, c, index=0, size=2, *temp;
 	p=malloc(size*sizeof(char));
-	while((c=getchar())!='\n'){
+	while((c=getchar())!='\n' && isalpha(c)){
 		if(index==0 && !isalpha(c)){
 			p=NULL;
 			return p;

@@ -8,6 +8,7 @@ struct bit_node {
 };
 
 typedef struct bit_node *Bit_node;
+
 Bit_node bit_new(int key);
 void bit_preorder(Bit_node b);
 void bit_inorder(Bit_node b);

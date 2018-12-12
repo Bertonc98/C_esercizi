@@ -1,6 +1,6 @@
 #include<stdio.h>
 #include<stdlib.h>
-//IN qursto esercizio lo heap sarà di interi
+//In questo esercizio lo heap sarà di interi
 typedef int *Heap ;
 
 struct pqueue {
@@ -15,10 +15,12 @@ void pqueue_destroy ( Pqueue p);
 int pqueue_length ( Pqueue p);
 void pqueue_insert ( Pqueue p, int n );
 int pqueue_extractmin ( Pqueue p);
+int pqueue_min(Pqueue p);
 
 int father(Heap h, int i);
 void swap(Heap h, int i, int j);
 void heapify_up(Heap h, int i);
+void heapify_down (Heap h, int i, int n);
 
 int main(){
 	int len, ins;
@@ -29,10 +31,10 @@ int main(){
 		scanf(" %d",&ins);
 		pqueue_insert(prova, ins);
 	}
-
-	for(int i=1; i<prova->count;i++){
-		printf("%d ",prova->h[i]);
+	for(int i=1; i<prova->size;i++){
+		printf("%d ",pqueue_extractmin(prova));
 	}
+
 	printf("\n");
 	pqueue_destroy(prova);
 
@@ -49,6 +51,7 @@ Pqueue pqueue_new ( int n ){
 	return new;
 }
 void pqueue_destroy ( Pqueue p){
+	free(p->h);
 	free(p);
 	p=NULL;
 }
@@ -65,7 +68,7 @@ void pqueue_insert ( Pqueue p, int n ){
 		p->count++;
 	}
 }
-
+ 
 void heapify_up(Heap h, int i){
 	if(i>1){
 		int j=father(h, i);
@@ -83,4 +86,29 @@ void swap(Heap h, int i, int j){
 	temp=h[i];
 	h[i]=h[j];
 	h[j]=temp;
+}
+
+void heapify_down ( Heap h , int i , int n ) {
+	if(2*i <= n){ 
+		int j; 
+		if(2*i==n)
+			j=2*i;
+		else
+			j= h[2*i] < h[2*i+1] ? 2*i : 2*i+1;
+		if (h[j]<h[i]){
+			swap(h, i, j);
+			heapify_down(h, j, n);
+		}
+	}
+}
+
+int pqueue_extractmin (Pqueue p){
+	int temp=p->h[1];
+	p->h[1]=p->h[p->count-1];
+	p->count--;
+	heapify_down(p->h,1,p->count);
+	return temp;
+}
+int pqueue_min(Pqueue p){
+	return p->h[1];
 }

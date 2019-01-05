@@ -59,6 +59,7 @@ void mergesort(int a[], int sx, int dx){
 		mergesort(a, ((sx+dx)/2), dx);
 
 		int i1=sx, i2=(sx+dx)/2, counter=0, sup[dx];
+		
 		while(i1<(sx+dx)/2 && i2<dx){
 			if(a[i1]>a[i2]){
 				sup[counter]=a[i2];

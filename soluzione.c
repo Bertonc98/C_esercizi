@@ -1,135 +1,203 @@
-#include <stdlib.h>
-#include <limits.h>
-#include <stdio.h>
-#include <time.h>
+#include<stdio.h>
+#include<stdlib.h>
 
-
-struct bit_node {
-  int item;
-  struct bit_node *l, *r;
+struct element {
+	int val;
+	int row;
+	int col;
+	struct element *right;
+	struct element *down;
 };
 
-typedef struct bit_node *Bit_node;
+typedef struct element *Element;
 
-// prototipi delle funzioni generali su alberi binari
-Bit_node bit_new( int item );
-void bit_printassummary( Bit_node p, int spaces );
-
-// prototipi delle funzioni su alberi binari di ricerca
-int bist_search( Bit_node p, int k );
-void bist_insert( Bit_node *r, int item );
+typedef struct {
+	Element head;
+	int rows;
+	int cols;
+} linkedMatrix;
 
 
+linkedMatrix leggiMatrice( void );
+linkedMatrix trasponiMatrice ( linkedMatrix m );
+void stampaMatrice ( linkedMatrix m );
+void stampaMatriceTrasposta ( linkedMatrix m );
 
-/***********************************************************************
-INSERIRE QUI LA FUNZIONE MAIN E EVENTUALI ALTRE FUNZIONI AGGIUNTIVE
-**********************************************************************/
-void print(Bit_node p, int start, int end);
 
-int main( void ){
-  Bit_node *p;
-  *p=NULL;
-  int input, start, end;
-  scanf(" %d",&input);
-  while(input!=0){
-    bist_insert(p, input);
-    scanf(" %d", &input);
-  }
-  printf("Inserisci il range: ");
-  scanf("%d %d",&start, &end);
 
-  print(*p, start, end);
-  printf("\n");
-  
-  return 0;
+int main () {
+	linkedMatrix m = leggiMatrice();
+	printf("\n");
+	stampaMatrice(m);
+	printf( "\n" );
+	stampaMatriceTrasposta(m);
+	return 0;
+
+}
+
+linkedMatrix trasponiMatrice ( linkedMatrix m ){
+
+	Element curr; // puntatore all'elemento corrente della matrice
+	Element first = NULL; // puntatore al primo elemento della riga corrente
+	Element top = NULL; // puntatore all'elemento sopra a quello corrente (oppure NULL)
+	Element curr_line=m.head;
+	Element fir=m.head;
+
+	linkedMatrix mt;
+	curr = malloc( sizeof (struct element) );
+	mt.head = curr;
+	mt.rows = m.cols;
+	mt.cols = m.rows;
+	first = curr;
+	int t=mt.rows*mt.cols;
+
+	int i=0, j=0;
+	while (fir) {
+		while(curr_line){
+
+		curr -> val = curr_line->val;
+		curr -> row = curr_line->col;
+		curr -> col = curr_line->row;
+		curr -> down = NULL;
+	
+		// collego l'elemento top all'elemento corrente
+		if( top ) {
+			top -> down = curr;
+		}
+
+		if ( t == 0 ) {
+			curr -> right = NULL;
+			break;	
+		}
+ 	
+		// creo spazio per il prossimo elemento
+		Element new = malloc( sizeof (struct element) ); 
+		
+		// posiziono new
+		// a destra dell'elemento corrente oppure all'inizio della prossima riga,
+		// aggiorno first e top di conseguenza
+		if ( j % mt.cols == mt.cols-1 ) {
+			curr -> right = NULL;
+			j = 0;
+
+			first -> down = new;
+			top = first;
+			first = new;
+			i++;
+		}
+		else {
+			curr -> right = new;
+			j++;
+			if ( top )
+				top = top->right;
+		}
+		
+		// sposto curr sulla prossima posizione
+//		printElement( curr );	
+		curr = new; 
+		curr_line=curr_line->down;
+	}
+	fir=fir->right;
+	curr_line=fir;
+}
+	
+
+return mt;
+
 }
 
 
-void print(Bit_node p, int start, int end){
-  if(p){
-    if(p->item>start && p->l!=NULL)
-      print(p->l, start, end);
-    if(p->item>=start && p->item<=end)
-      printf("%d ", p->item);
-    if(p->item<end && p->r!=NULL)
-      print(p->r, start, end);
-  }
-}
-/*************************************************************
-Implementazione delle funzioni generali su alberi binari
-***************************************************************/
+void stampaMatrice ( linkedMatrix m ){
+	Element curr_line=m.head;
+	Element curr=m.head;
+	int count=0;
 
-Bit_node bit_new( int item ) {
-  Bit_node new = malloc( sizeof( struct bit_node ) );
+	while(curr_line){
+		if(count<m.cols*m.rows){
+		while(curr){
+			printf("%d ",curr->val);
+			curr=curr->right;
+			count++;
+		}	
+		curr_line=curr_line->down;
+		curr=curr_line;
+		printf("\n");
 
-  if ( new == NULL ) {
-    printf( "err malloc\n" );
-    exit(-1);
-  }
+	  }
+	  else
+	  	break;
+	}
 
-  new -> l = new -> r = NULL;
-  new -> item = item;
-  return new;
 }
 
-
-void bit_printassummary( Bit_node p, int spaces ){
-  int i;
-  for ( i = 0; i < spaces; i++ )
-    printf( "  " );
-  printf( "*" );
-  if (!p)
-    printf( "\n" );
-
-  else {
-    printf( "%d\n", p -> item );
-    if ( p -> l || p -> r ) {
-      bit_printassummary( p -> l, spaces + 1 );
-      bit_printassummary( p -> r, spaces + 1 );
-    }
-  }
+void stampaMatriceTrasposta ( linkedMatrix m ){
+	stampaMatrice(trasponiMatrice(m));
 }
 
 
-/**************************************************************************
-* Implementazione delle funzioni specifiche su alberi binari di ricerca
-*************************************************************************/
+linkedMatrix leggiMatrice( void ){
 
-int bist_search( Bit_node p, int k ) {
-  if ( p ) {
-    while ( p && ( k != p -> item ) )
-      p = k < p -> item ? p -> l : p -> r;
-  }
-  if ( p == NULL ) return 0; // 0 e' usato come valore speciale (item NULL)
-  else return p -> item;
+	int r,c;
+	printf("Inserire numero di righe x colonne");
+	scanf( "%d %d", &r,&c );
+	int t = r*c;
+	Element curr; // puntatore all'elemento corrente della matrice
+	Element first = NULL; // puntatore al primo elemento della riga corrente
+	Element top = NULL; // puntatore all'elemento sopra a quello corrente (oppure NULL)
+
+	linkedMatrix m;
+	curr = malloc( sizeof (struct element) );
+	m.head = curr;
+	m.rows = r;
+	m.cols = c;
+	first = curr;
+
+	int i=0, j=0, n;
+	while ( --t >= 0 ) {
+		scanf( " %d", &n );
+		curr -> val = n;
+		curr -> row = i;
+		curr -> col = j;
+		curr -> down = NULL;
+	
+		// collego l'elemento top all'elemento corrente
+		if( top ) {
+			top -> down = curr;
+		}
+
+		if ( t == 0 ) {
+			curr -> right = NULL;
+			break;	
+		}
+ 	
+		// creo spazio per il prossimo elemento
+		Element new = malloc( sizeof (struct element) ); 
+		
+		// posiziono new
+		// a destra dell'elemento corrente oppure all'inizio della prossima riga,
+		// aggiorno first e top di conseguenza
+		if ( j % c == c-1 ) {
+			curr -> right = NULL;
+			j = 0;
+
+			first -> down = new;
+			top = first;
+			first = new;
+			i++;
+		}
+		else {
+			curr -> right = new;
+			j++;
+			if ( top )
+				top = top->right;
+		}
+		
+		// sposto curr sulla prossima posizione
+//		printElement( curr );	
+		curr = new; 
+	}
+	
+
+return m;
 }
 
-// assumo che item non sia già nell'albero
-void bist_insert( Bit_node *r, int item ) {
-  Bit_node f, p = *r, new = bit_new( item );
-
-  if ( p == NULL ) {
-    /* inserisco nell'albero vuoto */
-    *r = new;
-    return;
-  }
-
-  while ( p != NULL ) {
-    if ( item < p -> item ) {
-      f = p;
-      p = p -> l;
-    }
-
-    else { // quindi  item > p -> item
-      f = p;
-      p = p -> r;
-    }
-  }
-
-/* f e' il padre del nuovo nodo */
-  if ( item < f -> item ) {
-    f -> l = new;
-   }
-  else
-    f -> r = new;
-}
